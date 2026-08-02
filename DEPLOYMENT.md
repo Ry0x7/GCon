@@ -77,8 +77,8 @@ Free Render services can sleep while idle, so the first request after inactivity
 
 In the GitHub repository:
 
-1. Open **Settings > Secrets and variables > Actions > Variables**.
-2. Add `VITE_API_URL` with the Render origin only:
+1. Open **Settings > Environments** and create or open the `gcon` environment.
+2. Add an environment variable named `VITE_API_URL` with the Render origin only:
 
 ```text
 https://YOUR_RENDER_SERVICE.onrender.com
