@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
+import { currentAppPath } from "@/lib/navigation";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import SelectDates from "./pages/SelectDates";
@@ -21,7 +22,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {pages[window.location.pathname] ?? <NotFound />}
+      {pages[currentAppPath()] ?? <NotFound />}
     </TooltipProvider>
   </QueryClientProvider>
 );

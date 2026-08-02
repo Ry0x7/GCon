@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Github, GitCommit, ArrowLeft, Loader2 } from "lucide-react";
+import { appPath } from "@/lib/navigation";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +25,7 @@ const Login = () => {
 
       {/* Back to home */}
       <a
-        href="/"
+        href={appPath("/")}
         className="absolute left-5 top-5 z-20 flex items-center gap-2 rounded-md border-2 border-foreground bg-card px-3 py-2 font-mono text-xs font-bold uppercase shadow-[3px_3px_0_hsl(var(--foreground))] transition-transform hover:-translate-y-0.5 sm:left-8 sm:top-8"
       >
         <ArrowLeft className="h-4 w-4" />

@@ -1,4 +1,5 @@
 import { GitCommit, Github } from "lucide-react";
+import { appPath } from "@/lib/navigation";
 
 interface FooterProps {
   variant?: "full" | "minimal";
@@ -18,7 +19,7 @@ const Footer = ({ variant = "full" }: FooterProps) => {
   return (
     <footer className="relative z-10 border-t-2 border-foreground bg-secondary py-8">
       <div className="container mx-auto flex flex-col items-center gap-5 px-4 text-center">
-        <a href="/" className="flex items-center gap-2">
+        <a href={appPath("/")} className="flex items-center gap-2">
           <span className="flex h-7 w-7 -rotate-3 items-center justify-center rounded border-2 border-foreground bg-primary shadow-[2px_2px_0_hsl(var(--foreground))]">
             <GitCommit className="h-3 w-3 text-primary-foreground" />
           </span>

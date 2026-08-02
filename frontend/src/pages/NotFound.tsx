@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { GitCommit, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { appPath, currentAppPath } from "@/lib/navigation";
 
 const NotFound = () => {
-  const pathname = window.location.pathname;
+  const pathname = currentAppPath();
 
   useEffect(() => {
     console.error(
@@ -73,7 +74,7 @@ const NotFound = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Button variant="hero" size="lg" asChild>
-            <a href="/">
+            <a href={appPath("/")}>
               <Home className="h-4 w-4" />
               Back to Home
             </a>

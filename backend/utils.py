@@ -12,8 +12,8 @@ from git import Repo
 
 
 COMMIT_PRESETS = frozenset({1, 3, 6, 10})
-MAX_DATES = 100
-MAX_TOTAL_COMMITS = 100
+MAX_DATES = 200
+MAX_TOTAL_COMMITS = 500
 
 
 def encrypt_token(token: str, fernet: Fernet) -> str:

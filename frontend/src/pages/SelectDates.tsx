@@ -6,16 +6,19 @@ import MultiDateCalendar, {
   CommitCount,
   DateCommitMap,
 } from "@/components/MultiDateCalendar";
+import TemplateStudio from "@/components/TemplateStudio";
 import { toast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 import { setToken, getToken, clearToken } from "@/lib/auth";
 import { apiFetch } from "@/lib/api";
+import { appPath } from "@/lib/navigation";
 
 const SelectDates = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [authReady, setAuthReady] = useState(false);
   const [selectedDates, setSelectedDates] = useState<DateCommitMap>(new Map());
+  const [calendarFocusDate, setCalendarFocusDate] = useState<string>();
   const [currentUser, setCurrentUser] = useState<{
     username: string;
     avatar_url: string;
@@ -27,11 +30,11 @@ const SelectDates = () => {
 
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
-      window.history.replaceState({}, "", "/select-dates");
+      window.history.replaceState({}, "", appPath("/select-dates"));
     }
 
     if (!getToken()) {
-      window.location.href = "/";
+      window.location.href = appPath("/");
       return;
     }
 
@@ -132,6 +135,17 @@ const SelectDates = () => {
     setSelectedDates(new Map());
   };
 
+  const applyTemplate = (dates: DateCommitMap, focusDate: string) => {
+    setSelectedDates(dates);
+    setCalendarFocusDate(focusDate);
+    window.setTimeout(() => {
+      document.getElementById("calendar-editor")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
+
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
@@ -139,7 +153,7 @@ const SelectDates = () => {
     } finally {
       clearToken();
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = appPath("/");
       }, 800);
     }
   };
@@ -161,7 +175,7 @@ const SelectDates = () => {
       {/* Header */}
       <header className="relative z-10 border-b-2 border-foreground bg-card">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <a href="/" className="flex items-center gap-2">
+          <a href={appPath("/")} className="flex items-center gap-2">
             <div className="flex h-9 w-9 -rotate-3 items-center justify-center rounded-md border-2 border-foreground bg-primary shadow-[3px_3px_0_hsl(var(--foreground))]">
               <GitCommit className="h-4 w-4 text-primary-foreground" />
             </div>
@@ -221,12 +235,15 @@ const SelectDates = () => {
               Make some noise.
             </h1>
             <p className="mx-auto max-w-xl text-muted-foreground">
-              Pick a date. Tap it again for more volume. Your total stays visible below.
+              Stamp a pattern or paint one square at a time. Everything stays editable.
             </p>
           </motion.div>
 
+          <TemplateStudio onApply={applyTemplate} />
+
           {/* Calendar */}
           <motion.div
+            id="calendar-editor"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -237,6 +254,7 @@ const SelectDates = () => {
               clearAllDates={clearAllDates}
               onSubmit={handleSubmit}
               isSubmitting={isSubmitting}
+              focusDate={calendarFocusDate}
             />
           </motion.div>
 

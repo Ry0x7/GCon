@@ -3,6 +3,7 @@ import os
 import secrets
 import time
 from datetime import datetime, timedelta, timezone
+from urllib.parse import urlsplit
 
 import requests
 from cryptography.fernet import Fernet
@@ -46,12 +47,14 @@ JWT_SECRET_KEY = required_env("JWT_SECRET_KEY")
 FLASK_SECRET_KEY = required_env("FLASK_SECRET_KEY")
 FERNET_SECRET_KEY = required_env("FERNET_SECRET_KEY")
 FRONTEND_URL = required_env("FRONTEND_URL").rstrip("/")
+frontend_parts = urlsplit(FRONTEND_URL)
+FRONTEND_ORIGIN = f"{frontend_parts.scheme}://{frontend_parts.netloc}"
 GITHUB_CALLBACK_URL = os.getenv(
     "GITHUB_CALLBACK_URL", "http://localhost:5000/auth/github/callback"
 )
 
 app = Flask(__name__)
-CORS(app, origins=[FRONTEND_URL], supports_credentials=True)
+CORS(app, origins=[FRONTEND_ORIGIN], supports_credentials=True)
 
 app.secret_key = FLASK_SECRET_KEY
 

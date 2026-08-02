@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, Trash2, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ const MONTH_NAMES = [
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const COMMIT_PRESETS = [1, 3, 6, 10] as const;
-export const MAX_TOTAL_COMMITS = 100;
+export const MAX_TOTAL_COMMITS = 500;
 export type CommitCount = (typeof COMMIT_PRESETS)[number];
 export type DateCommitMap = Map<string, CommitCount>;
 
@@ -37,6 +37,7 @@ interface MultiDateCalendarProps {
   clearAllDates: () => void;
   onSubmit?: (entries: Array<{ date: string; count: CommitCount }>) => void;
   isSubmitting?: boolean;
+  focusDate?: string;
 }
 
 const MultiDateCalendar = ({
@@ -45,6 +46,7 @@ const MultiDateCalendar = ({
   clearAllDates,
   onSubmit,
   isSubmitting = false,
+  focusDate,
 }: MultiDateCalendarProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const year = currentDate.getFullYear();
@@ -54,6 +56,10 @@ const MultiDateCalendar = ({
   const today = new Date();
   const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
   const todayDate = today.getDate();
+
+  useEffect(() => {
+    if (focusDate) setCurrentDate(new Date(`${focusDate}T12:00:00`));
+  }, [focusDate]);
 
   const cycleDate = (dateString: string) => {
     onSelectedDatesChange((previous) => {

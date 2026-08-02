@@ -8,6 +8,7 @@ This project is intended for learning, testing, and visual experimentation. Cont
 
 - GitHub OAuth authentication with server-validated state
 - GitHub-style calendar with four commit intensity levels
+- Built-in heart and smile templates plus custom 5x7 words and names
 - Per-date controls and a live batch total
 - Strict server-side payload and batch validation
 - Encrypted GitHub token storage
@@ -56,6 +57,10 @@ cd frontend
 npm run lint
 npm run build
 ```
+
+## Production Deployment
+
+The repository includes a Render Blueprint and GitHub Actions workflows for a GitHub Pages + Render + Neon deployment. Follow [DEPLOYMENT.md](DEPLOYMENT.md) for the complete setup.
 
 Private repository contributions only appear on a GitHub profile when the user enables private contribution visibility. GitHub may take time to refresh the graph.
 

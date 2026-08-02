@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 import pytest
 from git import Repo
@@ -43,11 +43,14 @@ def test_validate_commit_entries_rejects_invalid_payloads(entries, message):
 
 def test_validate_commit_entries_limits_total_commits():
     entries = [
-        {"date": f"2026-01-{day:02d}", "count": 10}
-        for day in range(1, 12)
+        {
+            "date": (date(2026, 1, 1) + timedelta(days=day)).isoformat(),
+            "count": 10,
+        }
+        for day in range(51)
     ]
 
-    with pytest.raises(ValueError, match="No more than 100 commits"):
+    with pytest.raises(ValueError, match="No more than 500 commits"):
         utils.validate_commit_entries(entries)
 
 

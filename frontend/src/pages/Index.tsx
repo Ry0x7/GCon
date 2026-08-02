@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
 import Footer from "@/components/Footer";
+import { appPath } from "@/lib/navigation";
 
 
 const Index = () => {
@@ -36,9 +37,9 @@ const Index = () => {
     },
     {
       icon: Zap,
-      title: "Instant Updates",
+      title: "Words & Shapes",
       description:
-        "Generate an entire contribution pattern in one carefully limited batch.",
+        "Stamp a heart, a smile, or turn a short name into tiny green pixels.",
     },
     {
       icon: Shield,
@@ -125,14 +126,14 @@ const Index = () => {
           </div>
           {isAuthenticated() ? (
             <Button variant="heroOutline" size="sm" asChild>
-              <a href="/select-dates">
+              <a href={appPath("/select-dates")}>
                 <GitCommit className="h-4 w-4" />
                 Dashboard
               </a>
             </Button>
           ) : (
             <Button variant="heroOutline" size="sm" asChild>
-              <a href="/login">
+              <a href={appPath("/login")}>
                 <Github className="h-4 w-4" />
                 Sign In
               </a>
@@ -195,14 +196,14 @@ const Index = () => {
             >
               {isAuthenticated() ? (
                 <Button variant="hero" size="xl" asChild>
-                  <a href="/select-dates">
+                  <a href={appPath("/select-dates")}>
                     <GitCommit className="h-4 w-4" />
                     Dashboard
                   </a>
                 </Button>
               ) : (
                 <Button variant="hero" size="xl" asChild>
-                  <a href="/login">
+                  <a href={appPath("/login")}>
                     Get Started Free
                     <ArrowRight className="h-5 w-5" />
                   </a>
@@ -346,7 +347,7 @@ const Index = () => {
                   className="sm:h-14 sm:px-10 sm:text-lg"
                   asChild
                 >
-                  <a href="/select-dates">
+                  <a href={appPath("/select-dates")}>
                     <GitCommit className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span className="hidden sm:inline">Dashboard</span>
                     <span className="sm:hidden">Dashboard</span>
@@ -359,7 +360,7 @@ const Index = () => {
                   className="sm:h-14 sm:px-10 sm:text-lg"
                   asChild
                 >
-                  <a href="/login">
+                  <a href={appPath("/login")}>
                     <Github className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span className="hidden sm:inline">
                       Connect with GitHub
