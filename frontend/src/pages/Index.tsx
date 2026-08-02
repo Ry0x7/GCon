@@ -9,10 +9,10 @@ import {
   Zap,
   Shield,
   Clock,
-  Github,
   ArrowRight,
   Sparkles,
 } from "lucide-react";
+import GithubIcon from "@/components/icons/GithubIcon";
 import { isAuthenticated } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
@@ -134,7 +134,7 @@ const Index = () => {
           ) : (
             <Button variant="heroOutline" size="sm" asChild>
               <a href={appPath("/login")}>
-                <Github className="h-4 w-4" />
+                <GithubIcon className="h-4 w-4" />
                 Sign In
               </a>
             </Button>
@@ -361,7 +361,7 @@ const Index = () => {
                   asChild
                 >
                   <a href={appPath("/login")}>
-                    <Github className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span className="hidden sm:inline">
                       Connect with GitHub
                     </span>

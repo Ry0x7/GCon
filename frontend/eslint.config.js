@@ -23,7 +23,12 @@ export default tseslint.config(
         "warn",
         {
           allowConstantExport: true,
-          allowExportNames: ["buttonVariants", "toast"],
+          allowExportNames: [
+            "buttonVariants",
+            "toast",
+            "COMMIT_PRESETS",
+            "MAX_TOTAL_COMMITS",
+          ],
         },
       ],
       "@typescript-eslint/no-unused-vars": "off",

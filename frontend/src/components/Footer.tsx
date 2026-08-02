@@ -1,4 +1,5 @@
-import { GitCommit, Github } from "lucide-react";
+import { GitCommit } from "lucide-react";
+import GithubIcon from "@/components/icons/GithubIcon";
 import { appPath } from "@/lib/navigation";
 
 interface FooterProps {
@@ -34,7 +35,7 @@ const Footer = ({ variant = "full" }: FooterProps) => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-primary"
         >
-          <Github className="h-4 w-4" />
+          <GithubIcon className="h-4 w-4" />
           Based on the MIT-licensed CommitFill project
         </a>
       </div>

@@ -13,23 +13,36 @@ import { setToken, getToken, clearToken } from "@/lib/auth";
 import { apiFetch } from "@/lib/api";
 import { appPath } from "@/lib/navigation";
 
+type CurrentUser = {
+  username: string;
+  avatar_url: string;
+};
+
+const readStoredUser = (): CurrentUser | null => {
+  if (new URLSearchParams(window.location.search).has("token")) return null;
+  const value = localStorage.getItem("current_user");
+  return value ? JSON.parse(value) : null;
+};
+
 const SelectDates = () => {
+  const [tokenFromUrl] = useState(() =>
+    new URLSearchParams(window.location.search).get("token"),
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [authReady, setAuthReady] = useState(false);
+  const [authReady, setAuthReady] = useState(
+    () => readStoredUser() !== null,
+  );
   const [selectedDates, setSelectedDates] = useState<DateCommitMap>(new Map());
   const [calendarFocusDate, setCalendarFocusDate] = useState<string>();
-  const [currentUser, setCurrentUser] = useState<{
-    username: string;
-    avatar_url: string;
-  } | null>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(
+    readStoredUser,
+  );
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const tokenFromUrl = params.get("token");
-
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
+      localStorage.removeItem("current_user");
       window.history.replaceState({}, "", appPath("/select-dates"));
     }
 
@@ -67,17 +80,10 @@ const SelectDates = () => {
       }
     };
 
-    if (
-      localStorage.getItem("current_user") == null ||
-      localStorage.getItem("current_user") == undefined
-    ) {
+    if (localStorage.getItem("current_user") === null) {
       fetchUserDetails();
-    } else {
-      const user = JSON.parse(localStorage.getItem("current_user") || "{}");
-      setCurrentUser(user);
-      setAuthReady(true);
     }
-  }, []);
+  }, [tokenFromUrl]);
 
   const handleSubmit = async (
     entries: Array<{ date: string; count: CommitCount }>,
@@ -249,6 +255,7 @@ const SelectDates = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <MultiDateCalendar
+              key={calendarFocusDate ?? "calendar"}
               selectedDates={selectedDates}
               onSelectedDatesChange={setSelectedDates}
               clearAllDates={clearAllDates}

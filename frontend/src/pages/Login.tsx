@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Github, GitCommit, ArrowLeft, Loader2 } from "lucide-react";
+import { GitCommit, ArrowLeft, Loader2 } from "lucide-react";
+import GithubIcon from "@/components/icons/GithubIcon";
 import { appPath } from "@/lib/navigation";
 
 const Login = () => {
@@ -64,7 +65,7 @@ const Login = () => {
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
-              <Github className="h-5 w-5" />
+              <GithubIcon className="h-5 w-5" />
             )}
             {isLoading ? "Connecting..." : "Continue with GitHub"}
           </Button>

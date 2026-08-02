@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, Trash2, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,9 @@ const MultiDateCalendar = ({
   isSubmitting = false,
   focusDate,
 }: MultiDateCalendarProps) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(() =>
+    focusDate ? new Date(`${focusDate}T12:00:00`) : new Date(),
+  );
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
@@ -56,10 +58,6 @@ const MultiDateCalendar = ({
   const today = new Date();
   const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
   const todayDate = today.getDate();
-
-  useEffect(() => {
-    if (focusDate) setCurrentDate(new Date(`${focusDate}T12:00:00`));
-  }, [focusDate]);
 
   const cycleDate = (dateString: string) => {
     onSelectedDatesChange((previous) => {

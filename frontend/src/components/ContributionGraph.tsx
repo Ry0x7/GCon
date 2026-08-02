@@ -1,32 +1,19 @@
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+
+const CONTRIBUTIONS = Array.from({ length: 52 }, (_, weekIndex) =>
+  Array.from({ length: 7 }, (_, dayIndex) => {
+    const value = ((weekIndex + 3) * 37 + (dayIndex + 5) * 17) % 100;
+    let level = 0;
+    if (value > 30) level = 1;
+    if (value > 50) level = 2;
+    if (value > 70) level = 3;
+    if (value > 85) level = 4;
+    if (weekIndex % 7 === 0 || (weekIndex > 20 && weekIndex < 25)) level = 0;
+    return level;
+  }),
+);
 
 const ContributionGraph = () => {
-  // Generate a sample contribution pattern (52 weeks x 7 days)
-  const contributions = useMemo(() => {
-    const weeks = 52;
-    const days = 7;
-    const data: number[][] = [];
-
-    for (let w = 0; w < weeks; w++) {
-      const week: number[] = [];
-      for (let d = 0; d < days; d++) {
-        // Create a pattern that looks natural but has some gaps
-        const random = Math.random();
-        let level = 0;
-        if (random > 0.3) level = 1;
-        if (random > 0.5) level = 2;
-        if (random > 0.7) level = 3;
-        if (random > 0.85) level = 4;
-        // Add some intentional gaps
-        if (w % 7 === 0 || (w > 20 && w < 25)) level = 0;
-        week.push(level);
-      }
-      data.push(week);
-    }
-    return data;
-  }, []);
-
   const getLevelColor = (level: number) => {
     const colors = [
       "bg-commit-0",
@@ -45,7 +32,7 @@ const ContributionGraph = () => {
       </div>
 
       <div className="relative flex justify-between gap-[3px] overflow-x-auto pb-2">
-        {contributions.map((week, weekIndex) => (
+        {CONTRIBUTIONS.map((week, weekIndex) => (
           <div key={weekIndex} className="flex flex-col gap-[3px]">
             {week.map((level, dayIndex) => (
               <motion.div
