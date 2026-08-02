@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 49 55% 94%;
+        --foreground: 253 38% 15%;
+        --card: 43 100% 98%;
+        --card-foreground: 253 38% 15%;
+        --popover: 43 100% 98%;
+        --popover-foreground: 253 38% 15%;
+        --primary: 265 79% 58%;
+        --primary-foreground: 45 100% 97%;
+        --secondary: 169 67% 72%;
+        --secondary-foreground: 253 38% 15%;
+        --muted: 44 30% 87%;
+        --muted-foreground: 253 16% 39%;
+        --accent: 13 93% 68%;
+        --accent-foreground: 253 38% 15%;
+        --destructive: 350 78% 52%;
+        --destructive-foreground: 45 100% 97%;
+        --border: 253 38% 15%;
+        --input: 253 38% 15%;
+        --ring: 265 79% 58%;
+        --radius: 0.45rem;
+
+        --commit-level-0: 44 25% 85%;
+        --commit-level-1: 82 75% 78%;
+        --commit-level-2: 88 73% 62%;
+        --commit-level-3: 99 70% 48%;
+        --commit-level-4: 111 69% 33%;
+
+        --font-mono: "DM Mono", monospace;
+        --font-sans: "Bricolage Grotesque", system-ui, sans-serif;
+        --shadow-card: 6px 6px 0 hsl(var(--foreground));
+        --shadow-small: 3px 3px 0 hsl(var(--foreground));
+    }
+
+    * {
+        @apply border-border;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-background text-foreground antialiased;
+        min-width: 320px;
+        font-family: var(--font-sans);
+        background-image: radial-gradient(
+            hsl(var(--foreground) / 0.12) 0.8px,
+            transparent 0.8px
+        );
+        background-size: 18px 18px;
+    }
+
+    ::selection {
+        color: hsl(var(--foreground));
+        background: hsl(var(--secondary));
+    }
+
+    code,
+    pre,
+    .font-mono {
+        font-family: var(--font-mono);
+    }
+}
+
+@layer components {
+    .quirky-panel {
+        border: 2px solid hsl(var(--foreground));
+        background: hsl(var(--card));
+        box-shadow: var(--shadow-card);
+    }
+
+    .quirky-panel-small {
+        border: 2px solid hsl(var(--foreground));
+        background: hsl(var(--card));
+        box-shadow: var(--shadow-small);
+    }
+
+    .sticker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border: 2px solid hsl(var(--foreground));
+        border-radius: 999px;
+        padding: 0.35rem 0.75rem;
+        color: hsl(var(--foreground));
+        background: hsl(var(--secondary));
+        box-shadow: 3px 3px 0 hsl(var(--foreground));
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        transform: rotate(-2deg);
+    }
+
+    .display-type {
+        font-weight: 800;
+        letter-spacing: -0.055em;
+        line-height: 0.92;
+    }
+}
+
+@layer utilities {
+    .text-gradient {
+        color: hsl(var(--primary));
+        background: none;
+        -webkit-text-fill-color: currentColor;
+    }
+
+    .bg-grid-pattern {
+        background-image:
+            linear-gradient(hsl(var(--foreground) / 0.08) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(var(--foreground) / 0.08) 1px, transparent 1px);
+        background-size: 36px 36px;
+    }
+
+    .bg-dot-pattern {
+        background-image: radial-gradient(
+            circle,
+            hsl(var(--foreground) / 0.25) 1px,
+            transparent 1px
+        );
+        background-size: 16px 16px;
+    }
+
+    .glow-border {
+        box-shadow: var(--shadow-card);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
