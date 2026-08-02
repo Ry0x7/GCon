@@ -1,0 +1,39 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    groups:
+      frontend-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      frontend-versions:
+        applies-to: version-updates
+        patterns: ["*"]
+
+  - package-ecosystem: uv
+    directory: /backend
+    schedule:
+      interval: weekly
+    groups:
+      backend-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      backend-versions:
+        applies-to: version-updates
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /backend
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions-versions:
+        patterns: ["*"]
