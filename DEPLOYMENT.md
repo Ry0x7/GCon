@@ -71,7 +71,9 @@ After Render assigns its final `onrender.com` URL:
 3. Redeploy the Render service.
 4. Confirm `https://YOUR_RENDER_SERVICE.onrender.com/api/health` returns `{"status":"ok"}`.
 
-Free Render services can sleep while idle, so the first request after inactivity can be slow.
+Free Render services sleep after 15 minutes of inactivity and can take about a minute to wake.
+
+The included `Keep Render backend warm` workflow calls `/api/health` every 10 minutes using `VITE_API_URL` from the `gcon` environment. You can also run it manually from the Actions tab. Scheduled Actions are best-effort and can be delayed or disabled after prolonged repository inactivity; a paid Render instance is the only guaranteed always-on option.
 
 ## 5. Configure GitHub Pages
 
