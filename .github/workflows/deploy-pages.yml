@@ -21,7 +21,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VITE_API_URL: ${{ vars.VITE_API_URL }}
+      VITE_API_URL: ${{ vars.VITE_API_URL || 'http://localhost:5000' }}
       VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || format('/{0}/', github.event.repository.name) }}
     steps:
       - uses: actions/checkout@v7
