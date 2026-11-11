@@ -9,7 +9,7 @@ import MultiDateCalendar, {
 import TemplateStudio from "@/components/TemplateStudio";
 import { toast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
-import { setToken, getToken, clearToken } from "@/lib/auth";
+import { clearToken } from "@/lib/auth";
 import { apiFetch } from "@/lib/api";
 import { appPath } from "@/lib/navigation";
 
@@ -19,15 +19,11 @@ type CurrentUser = {
 };
 
 const readStoredUser = (): CurrentUser | null => {
-  if (new URLSearchParams(window.location.search).has("token")) return null;
   const value = localStorage.getItem("current_user");
   return value ? JSON.parse(value) : null;
 };
 
 const SelectDates = () => {
-  const [tokenFromUrl] = useState(() =>
-    new URLSearchParams(window.location.search).get("token"),
-  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [authReady, setAuthReady] = useState(
@@ -40,18 +36,6 @@ const SelectDates = () => {
   );
 
   useEffect(() => {
-    if (tokenFromUrl) {
-      setToken(tokenFromUrl);
-      localStorage.removeItem("current_user");
-      window.history.replaceState({}, "", appPath("/select-dates"));
-    }
-
-    if (!getToken()) {
-      window.location.href = appPath("/");
-      return;
-    }
-
-    // Fetch user details
     const fetchUserDetails = async () => {
       try {
         const response = await apiFetch("/api/user");
@@ -83,7 +67,7 @@ const SelectDates = () => {
     if (localStorage.getItem("current_user") === null) {
       fetchUserDetails();
     }
-  }, [tokenFromUrl]);
+  }, []);
 
   const handleSubmit = async (
     entries: Array<{ date: string; count: CommitCount }>,
@@ -92,7 +76,6 @@ const SelectDates = () => {
     const totalCommits = entries.reduce((total, entry) => total + entry.count, 0);
 
     try {
-      // Call Flask API
       const response = await apiFetch("/api/submit-dates", {
         method: "POST",
         body: JSON.stringify({ entries }),
@@ -101,7 +84,6 @@ const SelectDates = () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Success
         toast({
           title: "✅ Success!",
           description: `Created ${totalCommits} commits across ${entries.length} date(s).`,
@@ -109,9 +91,7 @@ const SelectDates = () => {
         });
 
         clearAllDates();
-        // console.log("API Response:", data);
       } else {
-        // Error from API
         toast({
           title: "❌ Error",
           description:
@@ -122,7 +102,6 @@ const SelectDates = () => {
         console.error("API Error:", data);
       }
     } catch (error) {
-      // Network or other error
       console.error("Error submitting dates:", error);
 
       toast({
@@ -174,11 +153,9 @@ const SelectDates = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
-      {/* Background effects */}
       <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-40" />
       <div className="pointer-events-none absolute -right-20 top-32 h-60 w-60 rotate-12 rounded-full border-2 border-foreground bg-accent/60" />
 
-      {/* Header */}
       <header className="relative z-10 border-b-2 border-foreground bg-card">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <a href={appPath("/")} className="flex items-center gap-2">
@@ -190,7 +167,6 @@ const SelectDates = () => {
             </span>
           </a>
 
-          {/* User Profile Banner */}
           <div className="flex items-center gap-2 sm:gap-4">
             {currentUser ? (
               <>
@@ -226,10 +202,8 @@ const SelectDates = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="relative z-10 py-12 sm:py-16">
         <div className="container mx-auto px-4">
-          {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -247,7 +221,6 @@ const SelectDates = () => {
 
           <TemplateStudio onApply={applyTemplate} />
 
-          {/* Calendar */}
           <motion.div
             id="calendar-editor"
             initial={{ opacity: 0, y: 20 }}
@@ -265,7 +238,6 @@ const SelectDates = () => {
             />
           </motion.div>
 
-          {/* Info Note */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
