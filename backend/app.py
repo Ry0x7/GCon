@@ -15,6 +15,7 @@ from flask_jwt_extended import (
     create_access_token,
     get_jwt_identity,
     jwt_required,
+    set_access_cookies,
     unset_jwt_cookies,
 )
 from flask_sqlalchemy import SQLAlchemy
@@ -66,7 +67,11 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 }
 app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
-app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_COOKIE_SECURE"] = FRONTEND_URL.startswith("https://")
+app.config["JWT_COOKIE_SAMESITE"] = "None" if app.config["JWT_COOKIE_SECURE"] else "Lax"
+app.config["JWT_COOKIE_CSRF_PROTECT"] = True
+
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
@@ -211,7 +216,8 @@ def github_callback():
     db.session.commit()
 
     jwt_token = create_access_token(identity=str(user.id))
-    response = make_response(redirect(f"{FRONTEND_URL}/select-dates?token={jwt_token}"))
+    response = make_response(redirect(f"{FRONTEND_URL}/select-dates"))
+    set_access_cookies(response, jwt_token)
     response.delete_cookie("github_oauth_state")
     return response
 
@@ -277,7 +283,6 @@ def logout():
     user = db_retry(lambda: db.session.get(User, get_jwt_identity()))
     token = decrypt_token(user.encrypted_token, fernet)
 
-    # Revoke GitHub token
     requests.delete(
         f"https://api.github.com/applications/{GITHUB_CLIENT_ID}/token",
         auth=(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET),
