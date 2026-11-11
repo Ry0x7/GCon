@@ -1,19 +1,23 @@
-const TOKEN_KEY = "auth_token";
+const CSRF_COOKIE = "csrf_access_token";
 
-export const setToken = (token: string) => {
-  localStorage.setItem(TOKEN_KEY, token);
+export const setToken = (_token: string) => {
+  // Authentication is managed by the backend HttpOnly cookie.
 };
 
 export const getToken = () => {
-  return localStorage.getItem(TOKEN_KEY);
+  // Keep the existing client-side authentication guard compatible with cookie sessions.
+  return "cookie-session";
+};
+
+export const getCsrfToken = () => {
+  const cookie = document.cookie
+    .split("; ")
+    .find((entry) => entry.startsWith(`${CSRF_COOKIE}=`));
+  return cookie ? decodeURIComponent(cookie.slice(CSRF_COOKIE.length + 1)) : null;
 };
 
 export const clearToken = () => {
-  localStorage.removeItem(TOKEN_KEY);
-  // Also clear current user info on logout
   localStorage.removeItem("current_user");
 };
 
-export const isAuthenticated = () => {
-  return Boolean(getToken());
-};
+export const isAuthenticated = () => true;
